@@ -1,0 +1,71 @@
+
+ .box {
+  max-width: 400px;
+  margin: 90px auto;
+  border-radius: 5px;
+  box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
+}
+  h1 {
+    color: white;
+    padding: 10px;
+
+  }
+   
+  
+  #heading {
+    background-color: rgb(184, 182, 182);
+    text-align: center;
+    margin: 100px auto;
+ 
+  }
+  .item {
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #F1F1F1;
+  }
+  
+  .item:last-child {
+    border-bottom: 0;
+  }
+
+  input[type="checkbox"] {
+    margin: 20px;
+  }
+  
+  /* Color of the links BEFORE scroll */
+.navbar-scroll .nav-link,
+.navbar-scroll .navbar-toggler-icon,
+.navbar-scroll .navbar-brand {
+  color: #fff;
+}
+
+/* Color of the links AFTER scroll */
+.navbar-scrolled .nav-link,
+.navbar-scrolled .navbar-toggler-icon,
+.navbar-scrolled .navbar-brand {
+  color: #fff;
+}
+
+/* Color of the navbar AFTER scroll */
+.navbar-scroll,
+.navbar-scrolled {
+  background-color: #cbbcb1;
+}
+
+.mask-custom {
+  backdrop-filter: blur(5px);
+  background-color: rgba(255, 255, 255, .15);
+}
+
+.navbar-brand {
+  font-size: 1.75rem;
+  letter-spacing: 3px;
+}
+  
+     
+  footer {
+    color: white;
+    color: rgba(0, 0, 0, 0.5);
+    text-align: center;
+  }
