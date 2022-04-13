@@ -13,6 +13,7 @@ app.use(express.static("public"));
 mongoose.connect("mongodb://localhost:27017/todolistDB", {
   useNewUrlParser: true,
 });
+const lists=[];
 const todoSchema = {
   name: String,
 };
@@ -34,10 +35,21 @@ const Listschema = {
   items: [todoSchema],
 };
 const List = mongoose.model("List", Listschema);
+// console.log(List);
 
+List.find({},function(err,data){
+  if(!err){
+    lists.push(data);
+    console.log(data);
+  }
+});
 
 app.get("/", function (req, res) {
- 
+  List.find({},function(err,data){
+    if(!err){
+      lists.push(data);
+    }
+  });
   todolist.find({}, function (err, found) {
     if (found.length === 0) {
       todolist.insertMany(defaultitem, function (err) {
@@ -47,63 +59,23 @@ app.get("/", function (req, res) {
           console.log("Successfully added the default items!");
         }
       });
+      
       res.redirect("/");
     }
-    // console.log(found);
+    
     else {
       res.render("list", {
+        lists : lists,
         listTitle: "Today",
-        newListItems: found,
+        newListItems: found
       });
     }
   });
 });
 
 
-
-// app.post("/", function (req, res) {
-//   const itemName = req.body.newItem;
-//   const listname = req.body.list;
-//   const item = new todolist({
-//     name: itemName,
-//   });
-//   if (listname === "Today") {
-//     item.save();
-//     res.redirect("/");
-//   } else {
-//     List.findOne({ name: listname }, function (err, foundlist) {
-//       foundlist.items.push(item);
-//       foundlist.save();
-//       res.redirect("/" + listname);
-//     });
-//   }
-// });
-
-// app.get("/:customList", function (req, res) {
-//  const customList = _.capitalize(req.params.customList);
-//   console.log(customList);
-//   List.findOne({ name: customList }, function (err, found) {
-//     if (!err) {
-//       if (!found) {
-//         console.log("Doesn't exists but will make one!");
-//         const list = new List({
-//           name: customList,
-//           items: defaultitem,
-//         });
-//         list.save();
-//         res.redirect("/" + customList);
-//       } else {
-//         console.log("Successfully Added to already existing Custom list!");
-//         res.render("list", {
-//           listTitle: found.name,
-//           newListItems: found.items,
-//         });
-//       }
-//     }
-//   });
-// });
-
 app.post("/additem", function (req, res) {
+
   const itemName = req.body.newItem;
   const listname = req.body.list;
   const item = new todolist({
@@ -124,6 +96,11 @@ app.post("/additem", function (req, res) {
 
 app.post("/addlist",function(req,res){
   const customList = _.capitalize(req.body.newlist);
+  List.find({},function(err,data){
+    if(!err){
+      lists.push(data);
+    }
+  });
   List.findOne({ name: customList }, function (err, found) {
     if (!err) {
       if (!found) {
@@ -133,10 +110,12 @@ app.post("/addlist",function(req,res){
           items: defaultitem,
         });
         list.save();
+        lists.push(list);
         res.redirect("/" + customList);
       } else {
         console.log("Successfully Added to already existing Custom list!");
         res.render("list", {
+          lists : lists,
           listTitle: found.name,
           newListItems: found.items,
         });
@@ -150,6 +129,7 @@ app.get("/:customList",function(req,res){
   List.findOne({ name: customList }, function (err, found) {
     if(!err){
   res.render("list", {
+    lists : lists,
     listTitle: found.name,
     newListItems: found.items, 
   });
